@@ -180,7 +180,16 @@ def update_order(order_id: int, order: Order):
     return {"message": "Orden actualizada"}
 
 
-@app.delete("/orders", tags=["Orders"])
-def delete_order():
+@app.delete("/orders/{order_id}", tags=["Orders"])
+def delete_order(order_id: int):
     # TAREA
+    # Validamos que la orden a actualizar exista
+    try:
+        orderId = next(o for o in orders if o.id == order_id)
+    except StopIteration:
+        raise HTTPException(status_code=404, detail="Orden no encontrada")
+
+    for id_o, o in enumerate(orders):
+        if o.id == order_id:
+            del orders[id_o]
     return {"message": "Orden eliminada"}

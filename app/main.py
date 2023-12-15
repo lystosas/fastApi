@@ -165,9 +165,18 @@ def create_order(order: Order):
     return {"message": "Orden creada"}
 
 
-@app.put("/orders", tags=["Orders"])
-def update_order():
+@app.put("/orders/{order_id}", tags=["Orders"])
+def update_order(order_id: int, order: Order):
     # TAREA
+    # Validamos que la orden a actualizar exista
+    try:
+        orderID = next(o for o in orders if o.id == order_id)
+    except StopIteration:
+        raise HTTPException(status_code=404, detail="Orden no encontrada")
+
+    for id_o, o in enumerate(orders):
+        if o.id == order_id:
+            orders[id_o] = order
     return {"message": "Orden actualizada"}
 
 

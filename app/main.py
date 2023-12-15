@@ -137,6 +137,22 @@ def get_orders():
 @app.post("/orders", tags=["Orders"])
 def create_order(order: Order):
     # TAREA
+    # Validamos si el usuario Existe
+    try:
+        users = next(u for u in user if u.id == order.user_id)
+    except StopIteration:
+        raise HTTPException(status_code=404, detail="Usuario No encontrado")
+
+    for product in order.products:
+        try:
+            product_in_stock = next(
+                p for p in products if p.id == product.id and p.in_stock
+            )
+        except StopIteration:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Producto {product.id} no encontrado o no esta en stock",
+            )
 
     newOrder = Order(
         id=order.id,

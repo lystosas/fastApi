@@ -143,6 +143,7 @@ def create_order(order: Order):
     except StopIteration:
         raise HTTPException(status_code=404, detail="Usuario No encontrado")
 
+    # Validamos si el producto existe
     for product in order.products:
         try:
             product_in_stock = next(
